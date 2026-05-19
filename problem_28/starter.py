@@ -20,4 +20,31 @@ for line in data[:5]:
 print()
 
 # --- Your code here ---
+from collections import defaultdict
 
+company_totals = defaultdict(int)
+subtractions = {"discount", "rebate"}
+
+for line in data:
+    if not line:
+        continue
+
+    parts = line.split(":", 1)
+    if len(parts) < 2:
+        continue
+
+    company = parts[0].strip()
+    action_and_val = parts[1].split()
+
+    if len(action_and_val) == 2:
+        action = action_and_val[0].lower()
+        amount = int(action_and_val[1])
+
+        if action in subtractions:
+            company_totals[company] -= amount
+        else:
+            company_totals[company] += amount
+
+cheapest_price = min(company_totals.values())
+
+print("Cheapest Ticket Option:", cheapest_price)
