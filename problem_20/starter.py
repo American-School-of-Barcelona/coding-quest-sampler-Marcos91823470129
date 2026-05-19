@@ -35,3 +35,51 @@ for line in data[:5]:
 print()
 
 # --- Your code here ---
+from collections import defaultdict
+
+winning_combinations = [
+    {1, 2, 3}, {4, 5, 6}, {7, 8, 9},
+    {1, 4, 7}, {2, 5, 8}, {3, 6, 9},
+    {1, 5, 9}, {3, 5, 7}
+]
+
+x_wins = 0
+o_wins = 0
+draws = 0
+
+for line in data:
+    moves = [int(x) for x in line.split()]
+    x_squares = set()
+    o_squares = set()
+    game_over = False
+
+    for index, move in enumerate(moves):
+        if index % 2==0:
+            x_squares.add(move)
+            for combo in winning_combinations:
+                if combo.issubset(x_squares):
+                    x_wins += 1
+                    game_over = True
+                    break
+
+        else:
+            o_squares.add(move)
+            for combo in winning_combinations:
+                if combo.issubset(o_squares):
+                    o_wins += 1
+                    game_over = True
+                    break
+
+        if game_over:
+            break
+
+    if not game_over:
+        draws += 1
+
+final_product = x_wins * o_wins * draws
+
+print("X Wins:", x_wins)
+print("O Wins:", o_wins)
+print("Draws:", draws)
+print("Verification Answer:", final_product)
+
