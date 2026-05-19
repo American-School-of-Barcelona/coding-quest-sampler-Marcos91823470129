@@ -20,4 +20,29 @@ for line in data[:5]:
 print()
 
 # --- Your code here ---
+internal_bytes = 0
+passenger_bytes = 0
 
+for line in data:
+    if not line:
+        continue
+
+    length_hex = line[4:8]
+    packet_length = int(length_hex, 16)
+
+    src_hex = line[24:28].lower()
+    dest_hex = line[32:36].lower()
+
+    is_internal = (src_hex == "c0a8" or dest_hex == "c0a8")
+    is_passenger = (src_hex == "0a00" or dest_hex == "0a00")
+
+    if is_internal:
+        internal_bytes += packet_length
+    if is_passenger:
+        passenger_bytes += packet_length
+
+ratio_string = f"{internal_bytes}/{passenger_bytes}"
+
+print("Internal Systems Total Bytes:", internal_bytes)
+print("Passenger Wifi Total Bytes:", passenger_bytes)
+print("Verification Answer:", ratio_string)
